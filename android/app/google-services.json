@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "930853569454",
+    "project_id": "electronicsrent-aa920",
+    "storage_bucket": "electronicsrent-aa920.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930853569454:android:22a163e50a9532ec9efe3f",
+        "android_client_info": {
+          "package_name": "com.electronicsrent.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7M56TjLPlsU1z2hcoGpi3awJ3Nz2TsDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930853569454:android:14ad6b0a5626be239efe3f",
+        "android_client_info": {
+          "package_name": "com.example.electronicsrent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7M56TjLPlsU1z2hcoGpi3awJ3Nz2TsDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
