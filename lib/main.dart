@@ -3,6 +3,7 @@
 //import 'package:elctronicsrent/Screens/login_screen.dart';
 //import 'package:erent/Screens/splash.dart';
 import 'package:electronicsrent/Screens/authentication_screen/phone_auth.dart';
+//import 'package:electronicsrent/Screens/home_screen.dart';
 import 'package:electronicsrent/Screens/location_screen.dart';
 import 'package:electronicsrent/Screens/login_screen.dart';
 import 'package:electronicsrent/Screens/splash.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         PhoneAuth.id: (context) => PhoneAuth(),
         LocationScreen.id: (context) => LocationScreen(),
+       // HomeScreen.id: (context) => HomeScreen(),
       },
     );
     // return FutureBuilder(
