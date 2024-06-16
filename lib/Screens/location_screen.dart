@@ -1,5 +1,5 @@
-import 'package:electronicsrent/Screens/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:electronicsrent/Screens/login_screen.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LocationScreen extends StatelessWidget {
@@ -8,16 +8,8 @@ class LocationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            FirebaseAuth.instance.signOut().then((value) {
-              Navigator.pushReplacementNamed(context, LoginScreen.id);
-            });
-          },
-          child: Text('Sign Out'),
-        ),
-      ),
-    );
+        body: Column(
+      children: [Image.asset('assets/images/location.jp')],
+    ));
   }
 }
