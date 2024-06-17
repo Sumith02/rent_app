@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       initialRoute: SplashScreen.id,
       routes: {
         SplashScreen.id: (context) => SplashScreen(),
-        LoginScreen.id: (context) => LoginScreen(),
+        LoginScreen.id: (context) => const LoginScreen(),
         PhoneAuth.id: (context) => PhoneAuth(),
         LocationScreen.id: (context) => LocationScreen(),
         HomeScreen.id: (context) => HomeScreen(

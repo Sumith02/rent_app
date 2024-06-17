@@ -1,3 +1,4 @@
+import 'package:electronicsrent/Screens/authentication_screen/phone_auth.dart';
 import 'package:electronicsrent/Screens/forgot_pass.dart';
 
 import 'package:electronicsrent/components/helper_function.dart';
@@ -95,10 +96,14 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ForgotPasswordPage();
-                        },),);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage();
+                            },
+                          ),
+                        );
                       },
                       child: Text(
                         "Forgot password?",
@@ -126,7 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                
                 const SizedBox(
                   height: 10,
                 ),
@@ -146,6 +150,30 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  width: 220,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, PhoneAuth.id);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.phone_android_outlined,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Continue with Phone',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
               //logo

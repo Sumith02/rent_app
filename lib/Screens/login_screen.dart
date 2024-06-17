@@ -1,5 +1,5 @@
 import 'package:electronicsrent/Screens/location_screen.dart';
-import 'package:electronicsrent/widget/auth_ui.dart';
+import 'package:electronicsrent/components/widget/auth_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

@@ -90,9 +90,8 @@ class AuthUi extends StatelessWidget {
                 child: Text(
                   'Login with Email',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
                   ),
                 ),
               ),
