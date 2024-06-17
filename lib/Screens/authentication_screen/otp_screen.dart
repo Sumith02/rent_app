@@ -1,7 +1,7 @@
 //import 'package:electronicsrent/Screens/authentication_screen/phone_auth.dart';
 //import 'package:electronicsrent/Screens/location_screen.dart';
-import 'package:electronicsrent/Screens/services/phoneauth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:electronicsrent/Screens/services/phoneauth_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class _OtpScreenState extends State<OtpScreen> {
   bool _loading = false;
   String error = '';
 
-  PhoneauthServices _services = PhoneauthServices();
+  PhoneAuthServices _services = PhoneAuthServices();
 
   var _text1 = TextEditingController();
   var _text2 = TextEditingController();
@@ -36,7 +36,7 @@ class _OtpScreenState extends State<OtpScreen> {
       final User? user = (await _auth.signInWithCredential(credential)).user;
 
       if (user != null) {
-        _services.addUser(context);
+        _services.addUser(context, user.uid);
         //Navigator.pushReplacementNamed(context, LocationScreen.id);
       } else {
         print('Login failed');

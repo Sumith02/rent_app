@@ -37,7 +37,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
         });
   }
 
-  PhoneauthServices _service = PhoneauthServices();
+  PhoneAuthServices _service = PhoneAuthServices();
 
   @override
   void dispose() {

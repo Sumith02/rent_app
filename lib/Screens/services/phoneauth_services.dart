@@ -5,30 +5,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PhoneauthServices {
+class PhoneAuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  Future<void> addUser(BuildContext context) async {
+  Future<void> addUser(BuildContext context, String uid) async {
     User? user = auth.currentUser;
 
     if (user != null) {
-      final QuerySnapshot result =
-          await users.where('uid', isEqualTo: user.uid).get();
+      final QuerySnapshot result = await users.where('uid', isEqualTo: uid).get();
 
       List<DocumentSnapshot> document = result.docs;
 
       if (document.isNotEmpty) {
         Navigator.pushReplacementNamed(context, LocationScreen.id);
       } else {
-        return users.doc(user.uid).set({
+        await users.doc(user.uid).set({
           'uid': user.uid,
           'mobile': user.phoneNumber,
           'email': user.email
         }).then((value) {
-          // After adding data to Firestore
           Navigator.pushReplacementNamed(context, LocationScreen.id);
         }).catchError((error) => print("Failed to add user: $error"));
       }
@@ -39,7 +37,7 @@ class PhoneauthServices {
     final PhoneVerificationCompleted verificationCompleted =
         (PhoneAuthCredential credential) async {
       await auth.signInWithCredential(credential);
-      await addUser(context);
+      await addUser(context, auth.currentUser?.uid ?? "");
     };
 
     final PhoneVerificationFailed verificationFailed =
@@ -62,19 +60,36 @@ class PhoneauthServices {
       );
     };
 
+    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (String verificationId) {
+      print(verificationId);
+    };
+
     try {
       await auth.verifyPhoneNumber(
         phoneNumber: number,
         verificationCompleted: verificationCompleted,
         verificationFailed: verificationFailed,
         codeSent: codeSent,
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
         timeout: const Duration(seconds: 60),
-        codeAutoRetrievalTimeout: (String verificationId) {
-          print(verificationId);
-        },
       );
     } catch (e) {
       print('Error ${e.toString()}');
+    }
+  }
+
+  Future<void> signInWithPhoneNumber(BuildContext context, String verId, String otp) async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verId,
+        smsCode: otp,
+      );
+
+      final UserCredential userCredential = await auth.signInWithCredential(credential);
+
+      await addUser(context, userCredential.user?.uid ?? "");
+    } catch (e) {
+      print('Failed to sign in: ${e.toString()}');
     }
   }
 }

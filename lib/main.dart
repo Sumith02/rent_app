@@ -1,14 +1,11 @@
-//import 'dart:async';
-
-//import 'package:elctronicsrent/Screens/login_screen.dart';
-//import 'package:erent/Screens/splash.dart';
 import 'package:electronicsrent/Screens/authentication_screen/phone_auth.dart';
-//import 'package:electronicsrent/Screens/home_screen.dart';
+import 'package:electronicsrent/Screens/home_screen.dart';
 import 'package:electronicsrent/Screens/location_screen.dart';
 import 'package:electronicsrent/Screens/login_screen.dart';
 import 'package:electronicsrent/Screens/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +27,11 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         PhoneAuth.id: (context) => PhoneAuth(),
         LocationScreen.id: (context) => LocationScreen(),
-       // HomeScreen.id: (context) => HomeScreen(),
+        HomeScreen.id: (context) => HomeScreen(
+              locationData:
+                  LocationData.fromMap({'latitude': 0, 'longitude': 0}),
+              address: '',
+            ),
       },
     );
     // return FutureBuilder(

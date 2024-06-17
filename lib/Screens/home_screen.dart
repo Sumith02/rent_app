@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
-//import 'package:geocoding/geocoding.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String id = 'home-screen';
-  final LocationData locationData;
+  final loc.LocationData locationData;
+  final String address;
 
-  HomeScreen({Key? key, required this.locationData}) : super(key: key);
+  HomeScreen({required this.locationData, required this.address});
 
-  // Future<String> getAddress() async {
-  //   List<Placemark> placemarks =
-  //       await placemarkFromCoordinates(52.2165157, 6.9437819);
-
-  //       retu
-  // }
+  void _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacementNamed(context, LoginScreen.id);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(locationData.latitude.toString()),
+        
+        automaticallyImplyLeading: false,
+        title: Text(address),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () => _logout(context),
+          ),
+        ],
       ),
       body: Center(
-        child: Text('Home Screen'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Latitude: ${locationData.latitude}'),
+            Text('Longitude: ${locationData.longitude}'),
+            SizedBox(height: 20),
+            Text('Address: $address'),
+          ],
+        ),
       ),
     );
   }

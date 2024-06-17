@@ -1,9 +1,8 @@
-//import 'dart:ffi';
-
 import 'package:electronicsrent/Screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
+import 'package:geocoding/geocoding.dart';
 
 class LocationScreen extends StatefulWidget {
   static const String id = 'location-screen';
@@ -13,33 +12,45 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  bool _loading = false;
-  Location location = new Location();
+  loc.Location location = loc.Location();
   bool _serviceEnabled = false;
-  PermissionStatus _permissionGranted = PermissionStatus.denied;
-  LocationData? _locationData;
+  loc.PermissionStatus _permissionGranted = loc.PermissionStatus.denied;
+  loc.LocationData? _locationData;
+  String? _address;
 
-  Future<LocationData?> getLocation() async {
+  Future<void> getLocation() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
-        return null;
+        return;
       }
     }
 
     _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
+    if (_permissionGranted == loc.PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return null;
+      if (_permissionGranted != loc.PermissionStatus.granted) {
+        return;
       }
     }
 
-    _locationData = await location.getLocation();
-    print(_locationData);
+    final locationData = await location.getLocation();
+    setState(() {
+      _locationData = locationData;
+    });
 
-    return _locationData;
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          _locationData!.latitude!, _locationData!.longitude!);
+      Placemark place = placemarks[0];
+      setState(() {
+        _address =
+            "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -76,38 +87,30 @@ class _LocationScreenState extends State<LocationScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: _loading
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                          ),
-                        )
-                      : ElevatedButton.icon(
-                          icon: Icon(CupertinoIcons.location_fill),
-                          label: Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: Text(
-                              'Around me',
+                  child: ElevatedButton.icon(
+                    icon: Icon(CupertinoIcons.location_fill),
+                    label: Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      child: Text(
+                        'Around me',
+                      ),
+                    ),
+                    onPressed: () {
+                      getLocation().then((value) {
+                        if (_locationData != null && _address != null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => HomeScreen(
+                                locationData: _locationData!,
+                                address: _address!,
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _loading = true;
-                            });
-                            getLocation().then((value) {
-                              if (value != null) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeScreen(
-                                            locationData: _locationData!),
-                                  ),
-                                );
-                              }
-                            });
-                          },
-                        ),
+                          );
+                        }
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
