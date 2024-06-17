@@ -1,3 +1,4 @@
+import 'package:electronicsrent/Screens/authentication_screen/auth.dart';
 import 'package:electronicsrent/Screens/authentication_screen/phone_auth.dart';
 import 'package:electronicsrent/Screens/home_screen.dart';
 import 'package:electronicsrent/Screens/location_screen.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
                   LocationData.fromMap({'latitude': 0, 'longitude': 0}),
               address: '',
             ),
+            AuthPage.id:(context)=>AuthPage(),
       },
     );
     // return FutureBuilder(

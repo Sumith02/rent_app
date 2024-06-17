@@ -1,3 +1,4 @@
+import 'package:electronicsrent/Screens/authentication_screen/auth.dart';
 import 'package:electronicsrent/Screens/services/google_auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ class AuthUi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final googleAuthService = GoogleAuthService(); // create an instance of GoogleAuthService
+    final googleAuthService =
+        GoogleAuthService(); // create an instance of GoogleAuthService
 
     return Center(
       child: Padding(
@@ -50,7 +52,8 @@ class AuthUi extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.all(Colors.white),
                 ),
                 onPressed: () async {
-                  User? user = await googleAuthService.signInWithGoogle(context);
+                  User? user =
+                      await googleAuthService.signInWithGoogle(context);
                   if (user != null) {
                     Navigator.pushReplacementNamed(context, HomeScreen.id);
                   }
@@ -74,17 +77,23 @@ class AuthUi extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'or',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Login with Email',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AuthPage.id);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Login with Email',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
             ),
