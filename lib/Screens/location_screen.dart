@@ -1,6 +1,8 @@
+import 'package:csc_picker/csc_picker.dart';
 import 'package:electronicsrent/Screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:legacy_progress_dialog/legacy_progress_dialog.dart';
 import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart';
 
@@ -17,6 +19,11 @@ class _LocationScreenState extends State<LocationScreen> {
   loc.PermissionStatus _permissionGranted = loc.PermissionStatus.denied;
   loc.LocationData? _locationData;
   String? _address;
+
+  String? countryValue;
+  String? stateValue;
+  String? cityValue;
+  String? address;
 
   Future<void> getLocation() async {
     _serviceEnabled = await location.serviceEnabled();
@@ -55,11 +62,19 @@ class _LocationScreenState extends State<LocationScreen> {
     }
   }
 
-  void showBottomScreen(BuildContext context) {
+  void showBottomScreen() {
+    // ProgressDialog progressDialog = ProgressDialog(
+    //   context: context,
+    //   backgroundColor: Colors.white,
+    //   textColor: Colors.black,
+    //   loadingText: 'Fetching location ',
+    //   progressIndicatorColor: Theme.of(context).primaryColor,
+    // );
+    //progressDialog.dismiss();
     showModalBottomSheet(
       isScrollControlled: true,
       enableDrag: true,
-      context: context,
+      context: context, // context is now available here
       builder: (context) {
         return Container(
           child: Column(
@@ -100,21 +115,35 @@ class _LocationScreenState extends State<LocationScreen> {
                     height: 40,
                     child: TextField(
                       decoration: InputDecoration(
-                          hintText: 'search city, area or neigbourhood',
+                          hintText: 'search city, area or neighbourhood',
                           icon: Icon(Icons.search)),
                     ),
                   ),
                 ),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  getLocation().then((location) {
+                    if (_locationData != null && _address != null) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => HomeScreen(
+                            locationData: _locationData!,
+                            address: _address!,
+                          ),
+                        ),
+                      );
+                    }
+                  });
+                },
                 horizontalTitleGap: 0.0,
                 leading: Icon(
                   Icons.my_location,
                   color: Colors.blue,
                 ),
                 title: Text(
-                  'use current location',
+                  'Use current location',
                   style: TextStyle(color: Colors.blue),
                 ),
                 subtitle: Text(
@@ -128,7 +157,36 @@ class _LocationScreenState extends State<LocationScreen> {
                   style:
                       TextStyle(color: Colors.blueGrey.shade900, fontSize: 12),
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: CSCPicker(
+                  layout: Layout.vertical,
+                  dropdownDecoration: BoxDecoration(shape: BoxShape.rectangle),
+                  defaultCountry: CscCountry.India,
+                  onCountryChanged: (value) {
+                    setState(() {
+                      countryValue = value;
+                    });
+                  },
+                  onStateChanged: (value) {
+                    setState(() {
+                      stateValue = value;
+                    });
+                  },
+                  onCityChanged: (value) {
+                    setState(() {
+                      cityValue = value;
+                      if (countryValue != null &&
+                          stateValue != null &&
+                          cityValue != null) {
+                        address = '$cityValue, $stateValue, $countryValue';
+                      }
+                    });
+                    print(address);
+                  },
+                ),
+              ),
             ],
           ),
         );
@@ -138,8 +196,16 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ProgressDialog progressDialog = ProgressDialog(
+    //   context: context,
+    //   backgroundColor: Colors.white,
+    //   textColor: Colors.black,
+    //   loadingText: 'Fetching location ',
+    //   progressIndicatorColor: Theme.of(context).primaryColor,
+    // );
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Padding(
@@ -187,7 +253,8 @@ class _LocationScreenState extends State<LocationScreen> {
           SizedBox(height: 20),
           InkWell(
             onTap: () {
-              showBottomScreen(context);
+              //progressDialog.show();
+              showBottomScreen();
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

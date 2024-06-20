@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
                   LocationData.fromMap({'latitude': 0, 'longitude': 0}),
               address: '',
             ),
-            AuthPage.id:(context)=>AuthPage(),
+        AuthPage.id: (context) => AuthPage(),
       },
     );
     // return FutureBuilder(
